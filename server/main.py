@@ -47,9 +47,9 @@ def add_new_emotionscores(predictedemotions):
                 neg_emotionscores[emotion['name']] = [emotion['score']]
     sorted_avgs = dict(sorted(neg_emotionsaverages.items(), key=lambda item: item[1], reverse=True))
     if len(list(sorted_avgs)) >= 3:
-        return list(sorted_avgs.keys())[:3]
+        return list(sorted_avgs.items())[:3]
     elif len(list(sorted_avgs)) > 0:
-        return list(sorted_avgs.keys())
+        return list(sorted_avgs.items())
     else:
         return ["Everything looks good!"]
     
