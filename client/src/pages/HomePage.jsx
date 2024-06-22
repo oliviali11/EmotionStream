@@ -51,6 +51,18 @@ const HomePage = () => {
       });
   }, []);
 
+  const notifyReport = () => {
+    toast.info('Nurse will be notified momentarily!', {
+      position: 'top-right',
+      autoClose: 3000, // Auto close the toast after 3 seconds
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
 
   const captureImage = () => {
     if (videoRef.current) {
@@ -89,12 +101,28 @@ const HomePage = () => {
     </button>
   </div>
 </div> */}
-<div className="fixed top-1/2 transform -translate-y-1/2 right-0 m-8">
+
+{/* <div className="fixed top-1/2 transform -translate-y-1/2 right-0 m-8">
   <button onClick={handleClick} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
     Details
   </button>
 </div>
+<div className="fixed top-1/2 transform -translate-y-1/2 right-0 m-8">
+  <button onClick={handleClick} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+    Report
+  </button>
+</div> */}
 
+<div className="fixed top-1/2 transform -translate-y-1/2 right-0 m-8">
+  <div className="mb-4"> {/* Add margin bottom to create space between buttons */}
+    <button onClick={handleClick} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-2 block">
+      Details
+    </button>
+    <button onClick={notifyReport} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded block">
+      Report
+    </button>
+  </div>
+</div>
 
 
 {/* <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
