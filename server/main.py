@@ -1,22 +1,3 @@
-# from flask import Flask, jsonify
-# from flask_cors import CORS
-
-# app = Flask(__name__)
-# cors = CORS(app, origins='*')
-
-# @app.route("/api/users", methods=['GET'])
-# def users():
-#     return jsonify({
-#         "users": [
-#             'arpan',
-#             'zach',
-#             'jessie'
-#         ]
-#     })
-
-# if __name__=="__main__":
-#     app.run(debug=True, port=8080)
-
 from flask import Flask, render_template, request, jsonify
 # import cv2
 import os
@@ -27,6 +8,7 @@ import time
 from flask_cors import CORS
 import io
 from PIL import Image
+import json
 
 app = Flask(__name__)
 cors = CORS(app, origins='*')
@@ -38,6 +20,39 @@ client = HumeBatchClient("r4qQLy6O83Hh6o7fytMHbVIoOGLViDIF2xIaxOujCBjUX6DE")
 output_dir = "static/captured_images"
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
+
+threshold = 0.5
+min_seconds = 4
+negative_emotions = ['Anger', 'Anxiety', 'Distress', 'Fear', 'Horror', 'Pain', 'Sadness', 'Surprise (negative)']
+neg_emotionscores = {}
+neg_emotionsaverages = {}
+
+def add_new_emotionscores(predictedemotions):
+    for emotion in predictedemotions:
+        if emotion['name'] in negative_emotions:
+            if emotion['name'] in neg_emotionscores.keys():
+                if len(neg_emotionscores[emotion['name']]) == min_seconds:
+                    neg_emotionscores[emotion['name']].pop(0)
+                    neg_emotionscores[emotion['name']].append(emotion['score'])
+                    emotionavg = sum(neg_emotionscores[emotion['name']]) / min_seconds
+                    print("AVERAGE", emotionavg)
+                    if emotionavg > threshold:
+                        neg_emotionsaverages[emotion['name']] = emotionavg
+                    elif emotion['name'] in neg_emotionsaverages.keys():
+                        del neg_emotionsaverages[emotion['name']]
+                    
+                else:
+                    neg_emotionscores[emotion['name']].append(emotion['score'])
+            else:
+                neg_emotionscores[emotion['name']] = [emotion['score']]
+    sorted_avgs = dict(sorted(neg_emotionsaverages.items(), key=lambda item: item[1], reverse=True))
+    if len(list(sorted_avgs)) >= 3:
+        return list(sorted_avgs.keys())[:3]
+    elif len(list(sorted_avgs)) > 0:
+        return list(sorted_avgs.keys())
+    else:
+        return ["Everything looks good!"]
+    
 
 @app.route('/')
 def index():
@@ -59,37 +74,24 @@ def capture():
     
     # Hume AI analysis
     filepaths = [filename]
-    config = FaceConfig()
+    config = FaceConfig(identify_faces=True)
     job = client.submit_job(None, [config], files=filepaths)
     details = job.await_complete()
 
     # COMMENT OUT FOR NOW
-    predictions_filename = f"static/predictions_{timestamp}.json"
+    predictions_filename = "static/predictions.json"
+    running_preds = "static/all_predictions.json"
     job.download_predictions(predictions_filename)
-    
-    return jsonify({"image_path": filename, "predictions_path": predictions_filename})
-    #COMMENT OUT FOR NOW
 
-    # predictions = []
-    # for result in details.results:
-    #     for prediction in result.predictions:
-    #         predictions.append(prediction.expression) 
+    with open(predictions_filename, 'r') as f:
+        predictions_data = json.load(f)
     
-    # return jsonify(predictions=predictions)
+    # top_emotions = add_new_emotionscores(predictions_data[0]['results']['predictions'][0]['models']['face']['grouped_predictions'][0]['predictions'][0]['emotions'])
 
+    # return jsonify(top_emotions)
+    top_emotions = add_new_emotionscores(predictions_data[0]['results']['predictions'][0]['models']['face']['grouped_predictions'][0]['predictions'][0]['emotions'])
 
-    # # Hume AI analysis
-    # config = FaceConfig()
-    # image = Image.open(io.BytesIO(image_data))
-    # job = client.submit_job_from_files([image], [config])
-    
-    # # Wait for job to complete
-    # details = job.await_complete()
-    
-    # # Get predictions from details
-    # predictions = details.predictions[0]
-
-    # return jsonify(predictions)
+    return jsonify(top_emotions)
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)

@@ -2,17 +2,15 @@ import React, { useRef, useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'
-import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+
 
 const HomePage = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [capturedImage, setCapturedImage] = useState(null);
-  const [predictions, setPredictions] = useState([]);
-  // const [randomId, setRandomId] = useState(null);
+  const [predictions, setPredictions] = useState(null);
 
-  // const history = useHistory();
   const navigate = useNavigate();
 
   const [randomId, setRandomId] = useState(() => {
@@ -32,7 +30,7 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    const intervalId = setInterval(captureImage, 5000); // Capture image every 5 seconds
+    const intervalId = setInterval(captureImage, 1000); // Capture image every 1 seconds
 
     // Clean-up function to clear the interval when component unmounts
     return () => clearInterval(intervalId);
@@ -49,6 +47,8 @@ const HomePage = () => {
         console.error(`Error: ${err}`);
         toast.error('Error accessing webcam');
       });
+      fetchPredictions();
+
   }, []);
 
   const notifyReport = () => {
@@ -87,81 +87,45 @@ const HomePage = () => {
     }
   };
 
+  const fetchPredictions = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/predictions/predictions.json');
+      setPredictions(response.data); // Set predictions state with fetched data
+      setError(null); // Clear any previous errors
+    } catch (error) {
+      console.error('Error fetching predictions:', error);
+      setError("Failed to fetch predictions.");
+    }
+  };
+
 
   return (
     <div>
       <h1>Hume AI Emotion Visualizer</h1>
       <video ref={videoRef} width="640" height="480" autoPlay></video>
-      <button id="capture-button" onClick={captureImage}>Capture Photo</button>
       <canvas ref={canvasRef} width="640" height="480" style={{ display: 'none' }}></canvas>
-      {/* <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-  <div className="ml-auto">
-    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-      Details
-    </button>
-  </div>
-</div> */}
 
-{/* <div className="fixed top-1/2 transform -translate-y-1/2 right-0 m-8">
-  <button onClick={handleClick} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+      <div className="fixed top-1/2 transform -translate-y-1/2 right-0 m-8">
+  <div className="mb-4 space-y-2"> {/* Add margin bottom and space-y utility */}
+  <button onClick={handleClick} className="shadow-md bg-purple-300 text-violet-500 hover:text-white rounded-md px-3 py-2 block w-full">
     Details
   </button>
-</div>
-<div className="fixed top-1/2 transform -translate-y-1/2 right-0 m-8">
-  <button onClick={handleClick} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+  <button onClick={notifyReport} className="shadow-md bg-purple-300 text-violet-500 hover:text-white rounded-md px-3 py-2 block w-full">
     Report
   </button>
-</div> */}
-
-<div className="fixed top-1/2 transform -translate-y-1/2 right-0 m-8">
-  <div className="mb-4"> {/* Add margin bottom to create space between buttons */}
-    <button onClick={handleClick} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-2 block">
-      Details
-    </button>
-    <button onClick={notifyReport} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded block">
-      Report
-    </button>
-  </div>
+</div>
 </div>
 
-
-{/* <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-auto mr-12">
-    Details
-  </button>
-</div> */}
-      {/* {predictions.length > 0 ? (
-        <div>
-          <h2>Emotion Predictions</h2>
-          <ul>
-            {predictions.map((prediction, index) => (
-              <li key={index}>{prediction}</li>
-            ))}
-          </ul>
-        </div>
-      ) : (
-        <p>No predictions available</p>
-      )} */}
-
-      {predictions && (
+      {predictions ? (
         <div>
           <h2>Emotion Predictions</h2>
           <pre>{JSON.stringify(predictions, null, 2)}</pre>
-          {/* {predictions.length > 0 ? (
-        <div>
-          <h2>Emotion Predictions</h2>
-          <ul>
-            {predictions.map((prediction, index) => (
-              <li key={index}>{prediction}</li>
-            ))}
-          </ul>
         </div>
       ) : (
         <p>No predictions available</p>
-      )} */}
-        </div>
       )}
-      
+
+    
       <ToastContainer />
 
     </div>
