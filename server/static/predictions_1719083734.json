@@ -1,0 +1,1 @@
+[{"source": {"type": "file", "filename": "captured_image_1719083734.jpg", "content_type": "image/jpeg", "md5sum": "7623034324b6b7c1d8e1ff7b712b33a4"}, "results": {"predictions": [{"file": "captured_image_1719083734.jpg", "file_type": "image", "models": {"face": {"metadata": null, "grouped_predictions": []}}}], "errors": []}}]
