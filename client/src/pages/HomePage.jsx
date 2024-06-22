@@ -10,14 +10,25 @@ const HomePage = () => {
   const canvasRef = useRef(null);
   const [capturedImage, setCapturedImage] = useState(null);
   const [predictions, setPredictions] = useState([]);
+  // const [randomId, setRandomId] = useState(null);
 
   // const history = useHistory();
   const navigate = useNavigate();
 
+  const [randomId, setRandomId] = useState(() => {
+    // Initialize randomId state with value from localStorage if available, else generate new random ID
+    const storedId = localStorage.getItem('randomId');
+    if (storedId) {
+      return parseInt(storedId, 10); // Parse stored ID as integer
+    } else {
+      const newRandomId = Math.floor(Math.random() * 1000) + 1; // Generate random ID
+      localStorage.setItem('randomId', newRandomId.toString()); // Store random ID in localStorage
+      return newRandomId;
+    }
+  });
+
   const handleClick = () => {
-    const randomId = Math.floor(Math.random() * 1000) + 1; // Generate random number between 1 and 1000
-    navigate(`/patient-details/${randomId}`)
-    // history.push(`/patient-details/${randomId}`); // Navigate to item detail page with random id
+    navigate(`/patient-details/${randomId}`);
   };
 
   useEffect(() => {
