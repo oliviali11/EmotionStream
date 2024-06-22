@@ -3,6 +3,7 @@ import React from 'react'
 import MainLayout from './layouts/MainLayout';
 import HomePage from './pages/HomePage';
 import NursePage from './pages/NursePage';
+import PatientDetailsPage from './pages/PatientDetailsPage';
 
 function App() {
 
@@ -11,6 +12,7 @@ function App() {
     <Route path='/' element={<MainLayout/>}>
       <Route index element={<HomePage/>}/>
       <Route path='/nurse' element={<NursePage/>}/>
+      <Route path='/patient-details/:id' element={<PatientDetailsPage/>}/>
     </Route>
     
   ))

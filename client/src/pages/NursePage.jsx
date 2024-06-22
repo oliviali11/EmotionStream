@@ -3,7 +3,7 @@ import React from 'react'
 const NursePage = () => {
   return (
     <>
-    <h1>Patient Alerts</h1>
+    <h1>Patients</h1>
     </>
   )
 }

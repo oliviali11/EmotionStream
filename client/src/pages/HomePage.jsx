@@ -2,12 +2,23 @@ import React, { useRef, useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [capturedImage, setCapturedImage] = useState(null);
   const [predictions, setPredictions] = useState([]);
+
+  // const history = useHistory();
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    const randomId = Math.floor(Math.random() * 1000) + 1; // Generate random number between 1 and 1000
+    navigate(`/patient-details/${randomId}`)
+    // history.push(`/patient-details/${randomId}`); // Navigate to item detail page with random id
+  };
 
   useEffect(() => {
     const intervalId = setInterval(captureImage, 5000); // Capture image every 5 seconds
@@ -60,6 +71,26 @@ const HomePage = () => {
       <video ref={videoRef} width="640" height="480" autoPlay></video>
       <button id="capture-button" onClick={captureImage}>Capture Photo</button>
       <canvas ref={canvasRef} width="640" height="480" style={{ display: 'none' }}></canvas>
+      {/* <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+  <div className="ml-auto">
+    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+      Details
+    </button>
+  </div>
+</div> */}
+<div className="fixed top-1/2 transform -translate-y-1/2 right-0 m-8">
+  <button onClick={handleClick} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+    Details
+  </button>
+</div>
+
+
+
+{/* <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-auto mr-12">
+    Details
+  </button>
+</div> */}
       {/* {predictions.length > 0 ? (
         <div>
           <h2>Emotion Predictions</h2>
