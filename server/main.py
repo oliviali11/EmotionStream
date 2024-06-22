@@ -1,3 +1,4 @@
+import json
 from flask import Flask, render_template, request, jsonify
 # import cv2
 import os
@@ -8,8 +9,42 @@ import time
 from flask_cors import CORS
 import io
 from PIL import Image
+from bson import json_util
 
-from server.db import fetch_patient, fetch_patients, fetch_report, fetch_reports, fetch_reports_for, insert_report
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
+from urllib.parse import quote_plus
+import datetime
+
+mongo_uri = "mongodb+srv://user:12345@emotionstream.9iou8ty.mongodb.net/?retryWrites=true&w=majority&appName=EmotionStream"
+
+client = MongoClient(mongo_uri)
+db = client.get_database("emotion_stream")
+patients = db.get_collection("patients")
+reports = db.get_collection("reports")
+
+def fetch_patients():
+    return patients.find()
+
+def fetch_patient(pid):
+    return patients.find_one(pid)
+
+def fetch_reports():
+    return reports.find()
+
+def fetch_reports_for(pid):
+    return reports.find({"pid": pid})
+
+def fetch_report(rid):
+    return reports.find_one(rid)
+
+def insert_report(emotion: str, score: float, pid):
+    return reports.insert_one({
+        "patient_id": pid,
+        "timestamp": datetime.datetime.now(datetime.UTC),
+        "emotion": emotion,
+        "score": score
+    })
 
 app = Flask(__name__)
 cors = CORS(app, origins='*')
@@ -19,15 +54,14 @@ output_dir = "static/captured_images"
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
+def parse_json(data):
+    return json.loads(json_util.dumps(data))
+
 def _response(data):
     if data:
-        return jsonify(data), 200
+        return jsonify(parse_json(list(data))), 200
     else:
         return jsonify({"error": "Data not found"}), 404
-
-@app.route('/')
-def index():
-    return render_template('index.html')
 
 # return all patients
 @app.route('/patients', methods=['GET'])
@@ -66,7 +100,6 @@ def get_reports_for(pid):
 @app.route('/reports/<rid>', methods=['GET'])
 def get_report(rid):
     return _response(fetch_report(rid))
-
 
 @app.route('/capture', methods=['POST'])
 def capture():
@@ -117,5 +150,9 @@ def capture():
 
     # return jsonify(predictions)
 
-if __name__ == '__main__':
-    app.run(debug=True, port=8080)
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+if __name__ == "__main__":
+    app.run(port=8000, debug=True)
