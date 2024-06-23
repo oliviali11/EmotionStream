@@ -7,7 +7,13 @@ import NursePage from './NursePage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faVideo } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
+import NursePage from './NursePage';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faVideo } from '@fortawesome/free-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
 
+
+library.add(faVideo);
 
 library.add(faVideo);
 
@@ -16,6 +22,7 @@ const HomePage = () => {
   const canvasRef = useRef(null);
   const [capturedImage, setCapturedImage] = useState(null);
   const [predictions, setPredictions] = useState(null);
+  const [negativeDetected, setNegativeDetected] = useState(false);
 
   const navigate = useNavigate();
 
@@ -53,6 +60,8 @@ const HomePage = () => {
         console.error(`Error: ${err}`);
         toast.error('Error accessing webcam');
       });
+      // fetchPredictions();
+
   }, []);
 
   const notifyReport = () => {
@@ -90,26 +99,33 @@ const HomePage = () => {
       const response = await axios.post('http://localhost:8000/capture', {
         image: imageData
       });
-      setPredictions(response.data);  // Update predictions state with response data
+      setPredictions(response.data.top_emotions);  // Update predictions state with response data
+      setNegativeDetected(response.data.negative_detected);
     } catch (error) {
       console.error("Error uploading image: ", error);
     }
   };
 
-  /*const fetchPredictions = async () => {
-    try {
-      const response = await axios.get('http://localhost:8000/predictions/predictions.json');
-      setPredictions(response.data); // Set predictions state with fetched data
-      setError(null); // Clear any previous errors
-    } catch (error) {
-      console.error('Error fetching predictions:', error);
-      setError("Failed to fetch predictions.");
-    }
-  };*/
+  // const fetchPredictions = async () => {
+  //   try {
+  //     const response = await axios.get('http://localhost:8000/predictions/predictions.json');
+  //     setPredictions(response.data); // Set predictions state with fetched data
+  //     setError(null); // Clear any previous errors
+  //   } catch (error) {
+  //     console.error('Error fetching predictions:', error);
+  //     setError("Failed to fetch predictions.");
+  //   }
+  // };
+
 
   return (
     <div className='ml-4'>
+    <div className='ml-4'>
     <div>
+      <div className="flex items-center">
+        <h1 className="text-2xl font-bold mr-4 text-violet-500">Live Patient Stream</h1>
+        <FontAwesomeIcon icon={['fa-solid', 'fa-video']} className="text-xl" />
+    </div>
       <div className="flex items-center">
         <h1 className="text-2xl font-bold mr-4 text-violet-500">Live Patient Stream</h1>
         <FontAwesomeIcon icon={['fa-solid', 'fa-video']} className="text-xl" />
@@ -134,14 +150,21 @@ const HomePage = () => {
 
 
 
+
+
+
       {predictions ? (
         <div>
+          <h2 className='font-bold mr-4 text-violet-500'>Emotion Display</h2>
           <h2 className='font-bold mr-4 text-violet-500'>Emotion Display</h2>
           <pre>{JSON.stringify(predictions, null, 2)}</pre>
         </div>
       ) : (
         <p>No predictions available</p>
       )}
+      </div>
+
+{negativeDetected && <NursePage negativeDetected={negativeDetected} patientID={randomId}/>}
       </div>
 
 {negativeDetected && <NursePage negativeDetected={negativeDetected} patientID={randomId}/>}
