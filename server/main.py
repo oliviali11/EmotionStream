@@ -66,10 +66,11 @@ bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 cors = CORS(app, origins='*')
 
+'''
 @app.before_first_request
 def clear_session_data():
     session.clear()  # Clear Flask session data
-
+'''
 # Create a directory to save captured images if it doesn't exist
 output_dir = "static"
 if not os.path.exists(output_dir):
