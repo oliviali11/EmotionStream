@@ -12,10 +12,6 @@ const NavBar = () => {
     <nav className='navbar'>
       <div className="navbar-brand">
         <h1 className="logo">Emotion Stream</h1>
-        <div className="icons">
-          <FontAwesomeIcon icon={faUserNurse} style={{ color: 'lightskyblue' }} />
-          <FontAwesomeIcon icon={faRegularHeart} style={{ color: 'red' }} />
-        </div>
       </div>
       <div className="navbar-links">
         <ul className="nav-links">

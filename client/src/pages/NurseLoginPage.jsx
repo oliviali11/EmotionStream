@@ -3,7 +3,7 @@ import axios from 'axios';
 import './styling/login.css';
 import { useNavigate } from "react-router-dom";
 
-export default function LoginPage() {
+export default function NurseLoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -17,12 +17,12 @@ export default function LoginPage() {
       alert("Password cannot be left blank!");
     } else {
       try {
-        const response = await axios.post('http://localhost:8000/login', {
+        const response = await axios.post('http://localhost:8000/nurse-login', {
           username: username,
           password: password
         });
+
         sessionStorage.setItem('accessToken', response.data.access_token);
-        //localStorage.setItem('accessToken', response.data.access_token);
         navigate("/nurse");
       } catch (error) {
         console.log(error);
@@ -66,6 +66,13 @@ export default function LoginPage() {
                 placeholder="Enter password"
                 required
               />
+            </div>
+            <div className="d-flex justify-content-between align-items-center mb-4">
+              <div className="form-check">
+                <input className="form-check-input" type="checkbox" value="" id="rememberMe" />
+                <label className="form-check-label" htmlFor="rememberMe">Remember me</label>
+              </div>
+              <a href="#!" className="text-body">Forgot password?</a>
             </div>
             <div className="text-center text-lg-start">
               <button type="submit" className="btn btn-primary">Login</button>

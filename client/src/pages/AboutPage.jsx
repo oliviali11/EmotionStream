@@ -16,6 +16,7 @@ const AboutPage = () => {
           <div className="auth-buttons">
             <Link to="/signup" className="auth-button">Nurse Sign Up</Link>
             <Link to="/nurse-login" className="auth-button">Nurse Log In</Link>
+            <Link to="/patient-login" className="auth-button">Patient Log In</Link>
         </div>
           <img className='titleImage' src={homeImage} alt="Home Image" />
         <div class="middle-sec">

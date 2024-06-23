@@ -11,28 +11,39 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 library.add(faVideo);
 
 const PatientPage = () => {
-  const videoRef = useRef(null);
-  const canvasRef = useRef(null);
-  const [capturedImage, setCapturedImage] = useState(null);
-  const [predictions, setPredictions] = useState(null);
-  const [negativeDetected, setNegativeDetected] = useState(false);
+    const videoRef = useRef(null);
+    const canvasRef = useRef(null);
+    const [capturedImage, setCapturedImage] = useState(null);
+    const [predictions, setPredictions] = useState(null);
+    const [negativeDetected, setNegativeDetected] = useState(false);
+  
+    const navigate = useNavigate();
+  
+    const [patientId, setPatientId] = useState(() => {
+      const storedId = sessionStorage.getItem('patientId');
+      if (storedId) {
+        return storedId;
+      } else {
+        // Fallback to some default or error handling
+        return null;
+      }
+    });
 
-  const navigate = useNavigate();
-
-  const [randomId, setRandomId] = useState(() => {
-    const storedId = sessionStorage.getItem('randomId');
-    if (storedId) {
-      return parseInt(storedId, 10);
-    } else {
-      const newRandomId = Math.floor(Math.random() * 1000) + 1;
-      sessionStorage.setItem('randomId', newRandomId.toString());
-      return newRandomId;
+  // Example login function
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('http://localhost:8000/patient-login', {
+        username: username,
+      });
+      sessionStorage.setItem('token', response.data.access_token);
+      sessionStorage.setItem('patientId', response.data.patient_id);
+      navigate('/patient-page');
+    } catch (error) {
+      console.error("Login error: ", error);
+      // Handle error
     }
-  });
-
-  const handleClick = () => {
-    navigate(`/patient-details/${randomId}`);
   };
+  
 
   useEffect(() => {
     const intervalId = setInterval(captureImage, 1000);
@@ -61,7 +72,7 @@ const PatientPage = () => {
       draggable: true,
       progress: undefined,
     });
-    // Logic to alert the nurse, for example, making an API call to notify the nurse
+    updatePatientStatus();
     console.log("Nurse has been alerted!");
   };
 
@@ -74,6 +85,17 @@ const PatientPage = () => {
       const imageData = canvasRef.current.toDataURL('image/jpeg');
       setCapturedImage(imageData);
       sendImageToBackend(imageData);
+    }
+  };
+
+  const updatePatientStatus = async () => {
+    try {
+      await axios.put(`http://localhost:8000/patient/${patientId}/status`, {
+        status: true
+      });
+      console.log('Patient status updated to TRUE');
+    } catch (error) {
+      console.error('Error updating patient status: ', error);
     }
   };
 
@@ -102,27 +124,28 @@ const PatientPage = () => {
         draggable: true,
         progress: undefined,
       });
-    // Logic to alert the nurse, for example, making an API call to notify the nurse
+    updatePatientStatus();
     console.log("Nurse has been alerted!");
   };
 
   return (
     <div className='ml-4'>
-      <div className="flex items-center">
-        <h1 className="text-2xl font-bold mr-4 text-violet-500">Live Patient Stream</h1>
-        <FontAwesomeIcon icon={['fa-solid', 'fa-video']} className="text-xl" />
+      <div className="flex items-center mt-20 mb-20">
+        <h1 className="text-6xl font-bold mr-4 text-black">Live Patient Stream</h1>
+        <FontAwesomeIcon icon={['fa-solid', 'fa-video']} className="text-6xl" />
       </div>
+
       <video ref={videoRef} width="640" height="480" autoPlay></video>
       <canvas ref={canvasRef} width="640" height="480" style={{ display: 'none' }}></canvas>
 
       <div className="fixed top-1/2 transform -translate-y-1/2 right-1/4 m-8">
         <div className="mb-4 space-y-2">
-          <button onClick={notifyReport} className="shadow-md bg-purple-300 text-violet-500 hover:text-white rounded-md px-4 py-3 block w-full text-lg">
-            Report
+          <button onClick={notifyReport} className="shadow-md bg-purple-300 text-violet-500 hover:text-white rounded-md px-8 py-8 block w-full text-6xl">
+            Alert Caretaker
           </button>
         </div>
       </div>
-      
+
       <ToastContainer />
     </div>
   );

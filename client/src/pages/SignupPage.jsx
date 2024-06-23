@@ -28,7 +28,7 @@ const SignupPage = () => {
     .then((response) => {
       console.log('Response:', response);
       if (response.status === 201) {
-        navigate('/login');
+        navigate('/nurse-login');
       } else {
         alert('Signup failed');
       }
@@ -110,7 +110,7 @@ const SignupPage = () => {
 
         <p className="small mt-3">
           Already have an account?{' '}
-          <a href="/login" className="link-danger">
+          <a href="/nurse-login" className="link-danger">
             Login
           </a>
         </p>
