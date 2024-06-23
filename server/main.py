@@ -119,6 +119,27 @@ def login_user():
     access_token = create_access_token(identity={"username": username})
     return jsonify(access_token=access_token), 200
 
+@app.route("/add_attack", methods=["POST"])
+def add_attack():
+    data = request.get_json()
+
+    name = data.get("name")
+    attack = data.get("attack")  # format: "mm-dd-yyyy, Emotion, Description"
+
+    if not name or not attack:
+        return jsonify({"error": "Name and attack details are required."}), 400
+
+    # Find the patient by name and update the attacks array
+    result = patients.update_one(
+        {"name": name},
+        {"$push": {"attacks": attack}}
+    )
+
+    if result.modified_count == 1:
+        return jsonify({"message": "Attack added successfully."}), 200
+    else:
+        return jsonify({"error": "Failed to update the patient's attacks."}), 400
+
 # return all patients
 @app.route('/patients', methods=['GET'])
 def get_patients():
@@ -157,11 +178,27 @@ def get_reports_for(pid):
 def get_report(rid):
     return _response(fetch_report(rid))
 
+# Nurse page route (protected)
+@app.route('/nurse-page', methods=['GET'])
+@jwt_required()
+def nurse_page():
+    # Your nurse page logic here
+    return jsonify({"message": "Welcome to the nurse page!"})
+
 threshold = 0.5
 min_seconds = 4
 negative_emotions = ['Anger', 'Anxiety', 'Distress', 'Fear', 'Horror', 'Pain', 'Sadness', 'Surprise (negative)']
 neg_emotionscores = {}
 neg_emotionsaverages = {}
+
+def tempAddAttack(name,attack):
+    if name and attack:
+        result = patients.update_one(
+            {"name": name},
+            {"$push": {"attacks": attack}}
+        )
+    return result
+
 
 def add_new_emotionscores(predictedemotions):
     for emotion in predictedemotions:
@@ -185,6 +222,7 @@ def add_new_emotionscores(predictedemotions):
     if len(list(sorted_avgs)) >= 3:
         return list(sorted_avgs.items())[:3], True
     elif len(list(sorted_avgs)) > 0:
+        tempAddAttack("Rishita Dhalbisoi", list(sorted_avgs.keys())[0] + ", stituation unknown")
         return list(sorted_avgs.items()), True
     else:
         return ["Everything looks good!"], False
