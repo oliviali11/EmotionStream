@@ -1,0 +1,85 @@
+/* login.css */
+
+/* General reset and font */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Container styles */
+.sign-container {
+    max-width: 600px;
+    margin: auto;
+    padding: 40px;
+    margin-top: 80px;
+    background-color: #b5c1ef;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 50px;
+}
+
+/* Image styles */
+.img-fluid {
+    width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+/* Form styles */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+/* Button styles */
+.btn-primary {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    text-align: center;
+    background-color: #1e4671;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #6482a3;
+}
+
+/* Small text styles */
+.small {
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Danger link styles */
+.link-danger {
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.link-danger:hover {
+    text-decoration: underline;
+}
