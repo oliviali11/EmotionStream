@@ -3,7 +3,13 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
+import NursePage from './NursePage';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faVideo } from '@fortawesome/free-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
 
+
+library.add(faVideo);
 
 const HomePage = () => {
   const videoRef = useRef(null);
@@ -61,6 +67,11 @@ const HomePage = () => {
     });
   };
 
+  const directSignup = () => {
+    navigate('/signup');
+  }
+
+
 
   const captureImage = () => {
     if (videoRef.current) {
@@ -97,30 +108,43 @@ const HomePage = () => {
   };*/
 
   return (
+    <div className='ml-4'>
     <div>
-      <h1>Hume AI Emotion Visualizer</h1>
+      <div className="flex items-center">
+        <h1 className="text-2xl font-bold mr-4 text-violet-500">Live Patient Stream</h1>
+        <FontAwesomeIcon icon={['fa-solid', 'fa-video']} className="text-xl" />
+    </div>
       <video ref={videoRef} width="640" height="480" autoPlay></video>
       <canvas ref={canvasRef} width="640" height="480" style={{ display: 'none' }}></canvas>
 
-      <div className="fixed top-1/2 transform -translate-y-1/2 right-0 m-8">
-        <div className="mb-4 space-y-2"> {/* Add margin bottom and space-y utility */}
-          <button onClick={handleClick} className="shadow-md bg-purple-300 text-violet-500 hover:text-white rounded-md px-3 py-2 block w-full">
-            Details
-          </button>
-          <button onClick={notifyReport} className="shadow-md bg-purple-300 text-violet-500 hover:text-white rounded-md px-3 py-2 block w-full">
-            Report
-          </button>
-        </div>
-      </div>
+<div className="fixed top-1/2 transform -translate-y-1/2 right-1/4 m-8">
+  <div className="mb-4 space-y-2">
+    <button onClick={handleClick} className="shadow-md bg-purple-300 text-violet-500 hover:text-white rounded-md px-4 py-3 block w-full text-lg"> {/* Increased padding and font size */}
+      Details
+    </button>
+    <button onClick={notifyReport} className="shadow-md bg-purple-300 text-violet-500 hover:text-white rounded-md px-4 py-3 block w-full text-lg"> {/* Increased padding and font size */}
+      Report
+    </button>
+    <button onClick={directSignup} className="shadow-md bg-purple-300 text-violet-500 hover:text-white rounded-md px-4 py-3 block w-full text-lg"> {/* Increased padding and font size */}
+      Sign Up!
+    </button>
+  </div>
+</div>
+
+
+
 
       {predictions ? (
         <div>
-          <h2>Emotion Predictions</h2>
+          <h2 className='font-bold mr-4 text-violet-500'>Emotion Display</h2>
           <pre>{JSON.stringify(predictions, null, 2)}</pre>
         </div>
       ) : (
         <p>No predictions available</p>
       )}
+      </div>
+
+{negativeDetected && <NursePage negativeDetected={negativeDetected} patientID={randomId}/>}
 
     
       <ToastContainer />

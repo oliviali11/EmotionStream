@@ -1,6 +1,5 @@
 import json
 from flask import Flask, render_template, request, jsonify
-# import cv2
 import os
 import base64
 from hume import HumeBatchClient
@@ -11,11 +10,11 @@ import io
 from PIL import Image
 import bson
 from bson import json_util
-
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from urllib.parse import quote_plus
 import datetime
+from flask_bcrypt import Bcrypt
 
 mongo_uri = "mongodb+srv://user:12345@emotionstream.9iou8ty.mongodb.net/?retryWrites=true&w=majority&appName=EmotionStream"
 
@@ -23,6 +22,7 @@ client = MongoClient(mongo_uri)
 db = client.get_database("emotion_stream")
 patients = db.get_collection("patients")
 reports = db.get_collection("reports")
+nurses = db.get_collection("nurses")
 
 def fetch_patients():
     return patients.find()
@@ -42,12 +42,24 @@ def fetch_report(rid):
 def insert_report(emotion: str, score: float, pid):
     return reports.insert_one({
         "patient_id": pid,
-        "timestamp": datetime.datetime.now(datetime.UTC),
+        "timestamp": datetime.datetime.now(datetime.timezone.utc),
         "emotion": emotion,
         "score": score
     })
 
+def register_user(name: str, username: str, password: str, uid):
+    return nurses.insert_one({
+        "nurse_id": uid,
+        "name": name,
+        "username": username,
+        "password": password
+    })
+
+def fetch_user_by_username(username: str):
+    return nurses.find_one({"username": username})
+
 app = Flask(__name__)
+bcrypt = Bcrypt(app)
 cors = CORS(app, origins='*')
 
 # Create a directory to save captured images if it doesn't exist
@@ -63,6 +75,45 @@ def _response(data):
         return jsonify(parse_json(list(data))), 200
     else:
         return jsonify({"error": "Data not found"}), 404
+
+@app.route("/signup", methods=["POST"])
+def signup():
+    data = request.get_json()
+    print('Received data:', data)
+    username = data["username"]
+    password = data["password"]
+    name = data["name"]
+    uid = data["uid"]
+
+    user_exists = fetch_user_by_username(username) is not None
+    print('User exists:', user_exists)
+
+    if user_exists:
+        return jsonify({"error": "Username already exists"}), 409
+
+    hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+    result = register_user(name, username, hashed_password, uid)
+    if result.inserted_id:
+        return jsonify({"inserted_id": str(result.inserted_id)}), 201
+    else:
+        return jsonify({"error": "Create failed"}), 400
+
+@app.route("/login", methods=["POST"])
+def login_user():
+    data = request.get_json()
+    username = data["username"]
+    password = data["password"]
+
+    user = fetch_user_by_username(username)
+
+    if user is None:
+        return jsonify({"error": "Please go to signup"}), 401
+
+    if not bcrypt.check_password_hash(user['password'], password):
+        return jsonify({"error": "Unauthorized"}), 401
+
+    access_token = create_access_token(identity={"username": username})
+    return jsonify(access_token=access_token), 200
 
 # return all patients
 @app.route('/patients', methods=['GET'])

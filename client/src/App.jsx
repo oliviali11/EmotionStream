@@ -3,16 +3,20 @@ import React from 'react'
 import MainLayout from './layouts/MainLayout';
 import HomePage from './pages/HomePage';
 import NursePage from './pages/NursePage';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
 import PatientDetailsPage from './pages/PatientDetailsPage';
+import AboutPage from './pages/AboutPage';
 
 function App() {
-
-
   const router = createBrowserRouter(createRoutesFromElements(
     <Route path='/' element={<MainLayout/>}>
       <Route index element={<HomePage/>}/>
       <Route path='/nurse' element={<NursePage/>}/>
       <Route path='/patient-details/:id' element={<PatientDetailsPage/>}/>
+      <Route path="/login" element={<LoginPage/>} />
+      <Route path="/signup" element={<SignupPage/>} />
+      <Route path="/about" element={<AboutPage/>}/>
     </Route>
     
   ))
