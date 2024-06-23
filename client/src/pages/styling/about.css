@@ -5,8 +5,7 @@
 
 .about-container {
     padding-top: 100px;
-    width: 80%;
-    margin: auto;
+    width: 100%;
 }
 .about-container h1 {
     color: white;
@@ -24,8 +23,32 @@
     font-style: italic;
 }
 
+
+.middle-sec{
+    width: 100%;
+    background-color:black;
+    padding: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.middle-text p{
+    color: white;
+    width: 90%;
+    font-size: 28px;
+}
+
+.rightImage {
+    width: 100%;
+}
+.midImage {
+    width: 600px;
+    border-radius: 20px;
+}
+
 .about-description {
-    width: 70%;
+    width: 50%;
     margin: auto;
     font-size: 24px;
     color: white;
@@ -38,4 +61,99 @@
     width: 60%;
     border-radius: 20px;
     margin-bottom: 50px;
+}
+
+.our-solution {
+    margin-top: 50px;
+}
+.our-solution h1 {
+    font-size: 46px;
+}
+
+.our-solution p{
+    margin: auto;
+    text-align: center;
+    font-size: 26px;
+    max-width: 50%;
+}
+
+.features {
+    display: flex;
+    justify-content: space-between; /* Space between each feature */
+    padding: 20px;
+  }
+  
+  /* Individual feature box */
+  .feature {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align items to the start (left) */
+    width: 30%; /* Adjust width to ensure three features fit in one row */
+    text-align: left; /* Left align text */
+    padding: 10px;
+    
+  }
+  
+  /* Feature content */
+  .feature-content {
+    display: flex;
+    align-items: center; /* Center items vertically */
+    margin-bottom: 5px;
+  }
+  
+  /* Image inside feature box */
+  .crossy {
+    width: 150px; /* Adjust size as needed */
+    height: auto;
+    margin-right: 0px; /* Space between image and text */
+  }
+  
+  .heading {
+    display: flex;
+    gap: 0;
+  }
+
+  .heading p {
+    text-align: left;
+  }
+  /* Feature description */
+  .feature-disc p {
+    font-size: 1rem; /* Adjust font size */
+    color: #333; /* Text color */
+  }
+  
+  /* Smaller text */
+  .feature-small-text {
+    font-size: 1.25rem; /* Smaller font size */
+    color: white; /* Grey color for smaller text */
+    margin-top: 5px; /* Space above the smaller text */
+    text-align: center;
+    margin: auto;
+  }
+.auth-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 20px;
+}
+
+.auth-button {
+    display: inline-block;
+    font-size: 30px;
+    padding: 10px 20px;
+    margin: 0 10px;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #120727;
+    border: 1px solid #120727;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+}
+
+.auth-button:hover {
+    background-color: #aec5de;
+    border-color: #aec5de;
+    color: #ffffff;
 }

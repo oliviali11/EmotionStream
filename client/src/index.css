@@ -3,5 +3,13 @@
 @tailwind utilities;
 
 body {
-    background: rgb(136, 142, 228);
+    background: hsla(265, 53%, 29%, 1);
+
+background: linear-gradient(0deg, hsla(265, 53%, 29%, 1) 0%, hsla(24, 93%, 73%, 1) 100%);
+
+background: -moz-linear-gradient(0deg, hsla(265, 53%, 29%, 1) 0%, hsla(24, 93%, 73%, 1) 100%);
+
+background: -webkit-linear-gradient(0deg, hsla(265, 53%, 29%, 1) 0%, hsla(24, 93%, 73%, 1) 100%);
+
+filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#432371", endColorstr="#FAAE7B", GradientType=1 );
 }

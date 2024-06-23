@@ -67,13 +67,6 @@ export default function LoginPage() {
                 required
               />
             </div>
-            <div className="d-flex justify-content-between align-items-center mb-4">
-              <div className="form-check">
-                <input className="form-check-input" type="checkbox" value="" id="rememberMe" />
-                <label className="form-check-label" htmlFor="rememberMe">Remember me</label>
-              </div>
-              <a href="#!" className="text-body">Forgot password?</a>
-            </div>
             <div className="text-center text-lg-start">
               <button type="submit" className="btn btn-primary">Login</button>
               <p className="small fw-bold mt-2 mb-0">Don't have an account? <a href="/signup" className="link-danger">Register</a></p>

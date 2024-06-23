@@ -1,6 +1,9 @@
 import React from 'react'
 import './styling/about.css'
 import homeImage from './imgs/homeimage.jpeg';
+import bedImage from './imgs/bedelder.png';
+import blackCross from './imgs/blackcross.png';
+import { Link } from 'react-router-dom';
 
 
 const AboutPage = () => {
@@ -8,10 +11,57 @@ const AboutPage = () => {
       <div className='about-container'>
         <h1>Emotion Stream</h1>
           <p className="about-description">
-          Empowering caregivers with real-time AI analysis of elderly patient livestreams to promptly alert nurses of distress or pain indicators
+          Empowering caregivers with real-time AI analysis of patient livestreams to promptly alert nurses of distress or pain indicators
           </p>
+          <div className="auth-buttons">
+            <Link to="/signup" className="auth-button">Nurse Sign Up</Link>
+            <Link to="/login" className="auth-button">Nurse Log In</Link>
+        </div>
           <img className='titleImage' src={homeImage} alt="Home Image" />
+        <div class="middle-sec">
+          <div class="middle-text">
+            <p>Millions of elderly people suffer from strokes, heart attacks, and the like. In fact, nearly 50% of Americans overall have experienced such diseases. Many studies show that early detection and notification of heart failure—through careful attention to symptoms in susceptible populations—can be critical in saving lives; tools that assist in monitoring the most vulnerable patient demographics are crucial.</p>
+          </div>
+          <div class="rightImage">
+            <img className='midImage' src={bedImage} alt="Bed Image"/>
+          </div>
+          
+        </div>
+        
+        <div class="our-solution">
+          <h1>Our Solution</h1>
+          <p>We built an automated software to recognize facial expressions using Hume AI to alert nurses immediately if patients show signs of discomfort.</p>
+          <div class="features">
+            <div class="feature">
+              <div class="heading">
+                <img class="crossy" src={blackCross} alt="Bed Image" />
+                <p>Facial Expression Measurement with Hume AI</p>
+              </div>
+              <small class="feature-small-text">Powered by advanced AI technology</small>
+            </div>
+            <div class="feature">
+              <div class="heading">
+                <img class="crossy" src={blackCross} alt="Bed Image" />
+                <p>Centralized Patient Database with MongoDB</p>
+              </div>
+              <small class="feature-small-text">Powered by advanced AI technology</small>
+            </div>
+            <div class="feature">
+              <div class="heading">
+                <img class="crossy" src={blackCross} alt="Bed Image" />
+                <p>llala</p>
+              </div>
+              <small class="feature-small-text">Powered by advanced AI technology</small>
+            </div>
+             
+            
+          </div>
+        
+        </div>
+        
+          
       </div>
+      
   );
 }
 
