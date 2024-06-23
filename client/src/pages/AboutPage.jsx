@@ -1,5 +1,5 @@
 import React from 'react'
-import './about.css'
+import './styling/about.css'
 import homeImage from './imgs/homeimage.jpeg';
 
 
@@ -10,7 +10,7 @@ const AboutPage = () => {
           <p className="about-description">
           Empowering caregivers with real-time AI analysis of elderly patient livestreams to promptly alert nurses of distress or pain indicators
           </p>
-          <img src="./imgs/homeimage.jpeg" alt="Home Image" />
+          <img className='titleImage' src={homeImage} alt="Home Image" />
       </div>
   );
 }
