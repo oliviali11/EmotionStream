@@ -132,7 +132,7 @@ def login_patient():
         return jsonify({"error": "Please go to signup"}), 401
     
     access_token = create_access_token(identity={"username": username})
-    return jsonify(access_token=access_token), 200
+    return jsonify(access_token=access_token, patient_id=str(user["_id"])), 200
 
 @app.route("/add_attack", methods=["POST"])
 def add_attack():
@@ -200,6 +200,31 @@ def nurse_page():
     # Your nurse page logic here
     return jsonify({"message": "Welcome to the nurse page!"})
 
+@app.route('/patients/alerts', methods=['GET'])
+def get_alert_patients():
+    alert_patients = patients.find({"status": True})
+    return _response(alert_patients)
+
+@app.route('/patient/<pid>/status', methods=['PUT'])
+def update_patient_status(pid):
+    try:
+        data = request.get_json()
+        new_status = data.get("status", None)
+        if new_status is None:
+            return jsonify({"error": "Status is required"}), 400
+
+        result = patients.update_one(
+            {"_id": bson.ObjectId(pid)},
+            {"$set": {"status": new_status}}
+        )
+
+        if result.modified_count == 1:
+            return jsonify({"message": "Patient status updated successfully."}), 200
+        else:
+            return jsonify({"error": "Failed to update patient status."}), 400
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 threshold = 0.5
 min_seconds = 4
 negative_emotions = ['Anger', 'Anxiety', 'Distress', 'Fear', 'Horror', 'Pain', 'Sadness', 'Surprise (negative)']
@@ -264,7 +289,6 @@ def capture():
     job = client.submit_job(None, [config], files=filepaths)
     details = job.await_complete()
 
-    # COMMENT OUT FOR NOW
     predictions_filename = "static/predictions.json"
     running_preds = "static/all_predictions.json"
     job.download_predictions(predictions_filename)
@@ -273,6 +297,13 @@ def capture():
         predictions_data = json.load(f)
     
     top_emotions, negative_detected = add_new_emotionscores(predictions_data[0]['results']['predictions'][0]['models']['face']['grouped_predictions'][0]['predictions'][0]['emotions'])
+
+    patient_username = request.headers.get('patientUsername')
+    if negative_detected:
+        patients.update_one(
+            {"name": patient_username},
+            {"$set": {"status": True}}
+        )
 
     return jsonify({"top_emotions": top_emotions, "negative_detected": negative_detected})
 
