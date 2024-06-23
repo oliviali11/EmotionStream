@@ -37,21 +37,21 @@ const AboutPage = () => {
                 <img class="crossy" src={blackCross} alt="Bed Image" />
                 <p>Facial Expression Measurement with Hume AI</p>
               </div>
-              <small class="feature-small-text">Powered by advanced AI technology</small>
+              <small class="feature-small-text">Integrating the Hume API model for human expression to detect top negative emotions of patients in real time for occurrences of medical related emergencies</small>
             </div>
             <div class="feature">
               <div class="heading">
                 <img class="crossy" src={blackCross} alt="Bed Image" />
                 <p>Centralized Patient Database with MongoDB</p>
               </div>
-              <small class="feature-small-text">Powered by advanced AI technology</small>
+              <small class="feature-small-text">Authentication system for registered nurses to log patient information and view patient emotion statuses</small>
             </div>
             <div class="feature">
               <div class="heading">
                 <img class="crossy" src={blackCross} alt="Bed Image" />
-                <p>llala</p>
+                <p>Authenticated login</p>
               </div>
-              <small class="feature-small-text">Powered by advanced AI technology</small>
+              <small class="feature-small-text">Efficient alert notification system for patient reports and communication to nurses for immediate assistance</small>
             </div>
              
             

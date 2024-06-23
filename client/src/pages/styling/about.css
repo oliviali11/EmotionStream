@@ -91,7 +91,12 @@
     width: 30%; /* Adjust width to ensure three features fit in one row */
     text-align: left; /* Left align text */
     padding: 10px;
+    transition: transform 0.3s ease;
     
+  }
+
+  .feature:hover{
+    transform: translateY(-5px);
   }
   
   /* Feature content */
@@ -126,8 +131,9 @@
   .feature-small-text {
     font-size: 1.25rem; /* Smaller font size */
     color: white; /* Grey color for smaller text */
-    margin-top: 5px; /* Space above the smaller text */
+    margin-top: 10px; /* Space above the smaller text */
     text-align: center;
+    text-align: top;
     margin: auto;
   }
 .auth-buttons {

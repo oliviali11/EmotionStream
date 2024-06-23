@@ -56,7 +56,13 @@ def register_user(name: str, username: str, password: str, uid):
         "username": username,
         "password": password
     })
-
+'''
+@app.route('/users/<id>/status', methods=['PUT'])
+def update_status(id):
+    status = request.json['status']
+    patients.users.update_one({'_id': ObjectId(id)}, {'$set': {'status': status}})
+    return jsonify({'status': 'success'})
+'''
 def fetch_user_by_username(username: str):
     return nurses.find_one({"username": username})
 
