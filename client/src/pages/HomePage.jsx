@@ -78,7 +78,7 @@ const HomePage = () => {
 
   const sendImageToBackend = async (imageData) => {
     try {
-      const response = await axios.post('http://localhost:8080/capture', {
+      const response = await axios.post('http://localhost:8000/capture', {
         image: imageData
       });
       setPredictions(response.data);  // Update predictions state with response data
@@ -89,7 +89,7 @@ const HomePage = () => {
 
   const fetchPredictions = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/predictions/predictions.json');
+      const response = await axios.get('http://localhost:8000/predictions/predictions.json');
       setPredictions(response.data); // Set predictions state with fetched data
       setError(null); // Clear any previous errors
     } catch (error) {
@@ -106,15 +106,15 @@ const HomePage = () => {
       <canvas ref={canvasRef} width="640" height="480" style={{ display: 'none' }}></canvas>
 
       <div className="fixed top-1/2 transform -translate-y-1/2 right-0 m-8">
-  <div className="mb-4 space-y-2"> {/* Add margin bottom and space-y utility */}
-  <button onClick={handleClick} className="shadow-md bg-purple-300 text-violet-500 hover:text-white rounded-md px-3 py-2 block w-full">
-    Details
-  </button>
-  <button onClick={notifyReport} className="shadow-md bg-purple-300 text-violet-500 hover:text-white rounded-md px-3 py-2 block w-full">
-    Report
-  </button>
-</div>
-</div>
+        <div className="mb-4 space-y-2"> {/* Add margin bottom and space-y utility */}
+          <button onClick={handleClick} className="shadow-md bg-purple-300 text-violet-500 hover:text-white rounded-md px-3 py-2 block w-full">
+            Details
+          </button>
+          <button onClick={notifyReport} className="shadow-md bg-purple-300 text-violet-500 hover:text-white rounded-md px-3 py-2 block w-full">
+            Report
+          </button>
+        </div>
+      </div>
 
       {predictions ? (
         <div>
@@ -129,6 +129,8 @@ const HomePage = () => {
       <ToastContainer />
 
     </div>
+
+    
   );
 };
 
