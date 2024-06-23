@@ -1,5 +1,6 @@
 import json
 from flask import Flask, render_template, request, jsonify
+from flask_jwt_extended import JWTManager, jwt_required, current_user, get_current_user, get_jwt_identity, create_access_token
 import os
 import base64
 from hume import HumeBatchClient
@@ -15,6 +16,7 @@ from pymongo.server_api import ServerApi
 from urllib.parse import quote_plus
 import datetime
 from flask_bcrypt import Bcrypt
+
 
 mongo_uri = "mongodb+srv://user:12345@emotionstream.9iou8ty.mongodb.net/?retryWrites=true&w=majority&appName=EmotionStream"
 
@@ -59,7 +61,9 @@ def fetch_user_by_username(username: str):
     return nurses.find_one({"username": username})
 
 app = Flask(__name__)
+app.config['JWT_SECRET_KEY'] = "8V1Us02u3v"
 bcrypt = Bcrypt(app)
+jwt = JWTManager(app)
 cors = CORS(app, origins='*')
 
 # Create a directory to save captured images if it doesn't exist
