@@ -1,10 +1,13 @@
 import React from 'react'
 import profileImage from '../assets/dummy450x450.jpg'
+import PatientModal from '../components/PatientModal';
 import { useState, useEffect } from 'react';
 import axios from 'axios'
 
 const NursePage = ({ negativeDetected, patientID }) => {
   const [patients, setPatients] = useState([]);
+  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchPatients = async () => {
@@ -20,32 +23,51 @@ const NursePage = ({ negativeDetected, patientID }) => {
     fetchPatients();
   }, []);
 
-  const handleClick = () => {
-    // Handle click event here, e.g., navigate to a different page
-    window.location.href = '/patient-stream';
+  const handleClick = (patient) => {
+    setSelectedPatient(patient);
+    setShowModal(true);
   };
+
+  const handleClose = () => {
+    setShowModal(false);
+    setSelectedPatient(null);
+  };
+
   return (
     <div className='ml-4'>
-    <h2 className="text-2xl font-bold text-violet-500 mb-4">Patients</h2>
+    <h2 className="text-2xl font-bold text-violet-500 mb-4">Welcome! Here are your patients:</h2>
 
     {negativeDetected ? (
-        <div className="alert alert-info" role="alert">
-          Patient #{patientID} is experiencing negative emotions -- please provide assistance!
+      <div className="alert alert-info" role="alert">
+        Patient #{patientID} is experiencing negative emotions -- please provide assistance!
 
-        </div>
+      </div>
       ) : (
         <p>No negative emotions detected -- patient is stable. </p>
       )}
-       <img
-      src={profileImage}
-      alt="Description of your image"
-      onClick={handleClick}
-      style={{ width: "250px",
-        height: "250px"
-       }} // Optional: Change cursor to pointer on hover
-    />
-    </div>
-  )
-}
 
-export default NursePage
+    <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {patients.map((patient) => (
+          <div
+            key={patient._id}
+            className="flex items-center border p-4 rounded shadow cursor-pointer"
+            onClick={() => handleClick(patient)}
+          >
+            <img
+              src={profileImage}
+              alt="Patient"
+              className="w-24 h-24 rounded-full mr-4"
+            />
+            <h3 className="text-lg font-semibold">{patient.name}</h3>
+          </div>
+        ))}
+      </div>
+
+      {showModal && selectedPatient && (
+        <PatientModal patient={selectedPatient} handleClose={handleClose} />
+      )}
+    </div>
+  );
+};
+
+export default NursePage;
