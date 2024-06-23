@@ -7,7 +7,6 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import PatientDetailsPage from './pages/PatientDetailsPage';
 import AboutPage from './pages/AboutPage';
-import AboutPage from './pages/AboutPage';
 
 function App() {
   const router = createBrowserRouter(createRoutesFromElements(
