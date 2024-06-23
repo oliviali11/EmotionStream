@@ -14,7 +14,7 @@ const PatientModal = ({ patient, handleClose }) => {
         <br />
         <p><strong>Past Incidents:</strong></p>
         <ul className="list-disc ml-8">
-          {patient.attacks.map((attack, index) => (
+          {patient.attacks.slice(0).reverse().slice(0, 15).map((attack, index) => (
             <li key={index}>{attack}</li>
           ))}
         </ul>

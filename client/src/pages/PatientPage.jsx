@@ -61,6 +61,8 @@ const PatientPage = () => {
       draggable: true,
       progress: undefined,
     });
+    // Logic to alert the nurse, for example, making an API call to notify the nurse
+    console.log("Nurse has been alerted!");
   };
 
   const captureImage = () => {
@@ -82,9 +84,26 @@ const PatientPage = () => {
       });
       setPredictions(response.data.top_emotions);
       setNegativeDetected(response.data.negative_detected);
+      if (response.data.negative_detected) {
+        alertNurse();
+      }
     } catch (error) {
       console.error("Error uploading image: ", error);
     }
+  };
+
+  const alertNurse = () => {
+    toast.info('Nurse was notified of emotional discomfort!', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    // Logic to alert the nurse, for example, making an API call to notify the nurse
+    console.log("Nurse has been alerted!");
   };
 
   return (
@@ -98,26 +117,12 @@ const PatientPage = () => {
 
       <div className="fixed top-1/2 transform -translate-y-1/2 right-1/4 m-8">
         <div className="mb-4 space-y-2">
-          <button onClick={handleClick} className="shadow-md bg-purple-300 text-violet-500 hover:text-white rounded-md px-4 py-3 block w-full text-lg">
-            Details
-          </button>
           <button onClick={notifyReport} className="shadow-md bg-purple-300 text-violet-500 hover:text-white rounded-md px-4 py-3 block w-full text-lg">
             Report
           </button>
         </div>
       </div>
-
-      {predictions ? (
-        <div>
-          <h2 className='font-bold mr-4 text-violet-500'>Emotion Display</h2>
-          <pre>{JSON.stringify(predictions, null, 2)}</pre>
-        </div>
-      ) : (
-        <p>No predictions available</p>
-      )}
-
-      {negativeDetected && <NursePage negativeDetected={negativeDetected} patientID={randomId} />}
-
+      
       <ToastContainer />
     </div>
   );

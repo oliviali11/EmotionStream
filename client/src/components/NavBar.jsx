@@ -8,26 +8,6 @@ import './navbar.css';
 const NavBar = () => {
   const navigate = useNavigate();
 
-  const handleNurseClick = (e) => {
-    e.preventDefault();
-    const isAuthenticated = !!sessionStorage.getItem('accessToken');
-    if (isAuthenticated) {
-      navigate('/nurse');
-    } else {
-      navigate('/nurse-login');
-    }
-  };
-
-  const handlePatientClick = (e) => {
-    e.preventDefault();
-    const isAuthenticated = !!sessionStorage.getItem('accessToken');
-    if (isAuthenticated) {
-      navigate('/patient');
-    } else {
-      navigate('/patient-login');
-    }
-  };
-
   return (
     <nav className='navbar'>
       <div className="navbar-brand">
@@ -39,8 +19,8 @@ const NavBar = () => {
       </div>
       <div className="navbar-links">
         <ul className="nav-links">
-          <li><NavLink to="/patient-login" onClick={handlePatientClick}>Patient</NavLink></li>
-          <li><NavLink to="/nurse-login" onClick={handleNurseClick}>Nurse</NavLink></li>
+          <li><NavLink to="/patient-login">Patient</NavLink></li>
+          <li><NavLink to="/nurse-login">Nurse</NavLink></li>
           <li><NavLink to="/about">About</NavLink></li>
         </ul>
       </div>

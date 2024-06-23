@@ -1,7 +1,6 @@
 import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom';
 import React from 'react'
 import MainLayout from './layouts/MainLayout';
-import HomePage from './pages/HomePage';
 import NursePage from './pages/NursePage';
 import NurseLoginPage from './pages/NurseLoginPage';
 import PatientLoginPage from './pages/PatientLoginPage';

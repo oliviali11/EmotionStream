@@ -19,6 +19,7 @@ export default function PatientLoginPage() {
         });
 
         sessionStorage.setItem('accessToken', response.data.access_token);
+        sessionStorage.setItem('patientUsername', username);
         navigate("/patient");
       } catch (error) {
         console.log(error);
