@@ -60,6 +60,9 @@ def register_user(name: str, username: str, password: str, uid):
 def fetch_user_by_username(username: str):
     return nurses.find_one({"username": username})
 
+def fetch_patient_by_username(username: str):
+    return patients.find_one({"name": username})
+
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = "8V1Us02u3v"
 bcrypt = Bcrypt(app)
@@ -102,7 +105,7 @@ def signup():
     else:
         return jsonify({"error": "Create failed"}), 400
 
-@app.route("/login", methods=["POST"])
+@app.route("/nurse-login", methods=["POST"])
 def login_user():
     data = request.get_json()
     username = data["username"]
@@ -116,6 +119,18 @@ def login_user():
     if not bcrypt.check_password_hash(user['password'], password):
         return jsonify({"error": "Unauthorized"}), 401
 
+    access_token = create_access_token(identity={"username": username})
+    return jsonify(access_token=access_token), 200
+
+@app.route("/patient-login", methods=["POST"])
+def login_patient():
+    data = request.get_json()
+    username = data["username"]
+
+    user = fetch_patient_by_username(username)
+    if user is None: 
+        return jsonify({"error": "Please go to signup"}), 401
+    
     access_token = create_access_token(identity={"username": username})
     return jsonify(access_token=access_token), 200
 

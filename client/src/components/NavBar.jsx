@@ -10,11 +10,21 @@ const NavBar = () => {
 
   const handleNurseClick = (e) => {
     e.preventDefault();
-    const isAuthenticated = !!localStorage.getItem('accessToken');
+    const isAuthenticated = !!sessionStorage.getItem('accessToken');
     if (isAuthenticated) {
       navigate('/nurse');
     } else {
-      navigate('/login');
+      navigate('/nurse-login');
+    }
+  };
+
+  const handlePatientClick = (e) => {
+    e.preventDefault();
+    const isAuthenticated = !!sessionStorage.getItem('accessToken');
+    if (isAuthenticated) {
+      navigate('/patient');
+    } else {
+      navigate('/patient-login');
     }
   };
 
@@ -29,8 +39,8 @@ const NavBar = () => {
       </div>
       <div className="navbar-links">
         <ul className="nav-links">
-          <li><NavLink to="/patient-stream">Home Stream</NavLink></li>
-          <li><NavLink to="#" onClick={handleNurseClick}>Nurse</NavLink></li>
+          <li><NavLink to="/patient-login" onClick={handlePatientClick}>Patient</NavLink></li>
+          <li><NavLink to="/nurse-login" onClick={handleNurseClick}>Nurse</NavLink></li>
           <li><NavLink to="/about">About</NavLink></li>
         </ul>
       </div>

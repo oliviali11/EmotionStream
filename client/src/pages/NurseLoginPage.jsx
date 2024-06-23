@@ -3,7 +3,7 @@ import axios from 'axios';
 import './styling/login.css';
 import { useNavigate } from "react-router-dom";
 
-export default function LoginPage() {
+export default function NurseLoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -17,12 +17,12 @@ export default function LoginPage() {
       alert("Password cannot be left blank!");
     } else {
       try {
-        const response = await axios.post('http://localhost:8000/login', {
+        const response = await axios.post('http://localhost:8000/nurse-login', {
           username: username,
           password: password
         });
 
-        localStorage.setItem('accessToken', response.data.access_token);
+        sessionStorage.setItem('accessToken', response.data.access_token);
         navigate("/nurse");
       } catch (error) {
         console.log(error);
