@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './styling/signin.css'
 import { useNavigate } from 'react-router-dom';
 
 const SignupPage = () => {
@@ -48,90 +49,72 @@ const SignupPage = () => {
   };
 
   return (
-    <div className="container h-100">
-      <div className="container-fluid h-custom">
-        <div className="row d-flex justify-content-center align-items-center h-100">
-          <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-            <form>
-              <div className="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
-                <p className="lead fw-normal mb-0 me-3">Create Your Account</p>
-              </div>
-
-              <div className="form-outline mb-4">
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  id="form3Example1"
-                  className="form-control form-control-lg"
-                  placeholder="Enter your name"
-                />
-                <label className="form-label" htmlFor="form3Example1">
-                  Name
-                </label>
-              </div>
-
-              <div className="form-outline mb-4">
-                <input
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  id="form3Example2"
-                  className="form-control form-control-lg"
-                  placeholder="Enter a valid username"
-                />
-                <label className="form-label" htmlFor="form3Example2">
-                  Username
-                </label>
-              </div>
-
-              <div className="form-outline mb-3">
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  id="form3Example3"
-                  className="form-control form-control-lg"
-                  placeholder="Enter password"
-                />
-                <label className="form-label" htmlFor="form3Example3">
-                  Password
-                </label>
-              </div>
-
-              <div className="form-outline mb-3">
-                <input
-                  type="text"
-                  value={uid}
-                  onChange={(e) => setUid(e.target.value)}
-                  id="form3Example4"
-                  className="form-control form-control-lg"
-                  placeholder="Enter UID"
-                />
-                <label className="form-label" htmlFor="form3Example4">
-                  UID
-                </label>
-              </div>
-
-              <div className="text-center text-lg-start mt-4 pt-2">
-                <button
-                  type="button"
-                  className="btn btn-primary btn-lg"
-                  onClick={registerUser}
-                >
-                  Signup
-                </button>
-                <p className="small fw-bold mt-2 pt-1 mb-0">
-                  Already have an account?{' '}
-                  <a href="/login" className="link-danger">
-                    Login
-                  </a>
-                </p>
-              </div>
-            </form>
-          </div>
+    <div className="sign-container">
+      <h1>Sign In Here</h1>
+      <form>
+        <div className="form-group">
+          <label htmlFor="name">Name</label>
+          <input
+            type="text"
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="form-control"
+            placeholder="Enter your name"
+          />
         </div>
-      </div>
+
+        <div className="form-group">
+          <label htmlFor="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="form-control"
+            placeholder="Enter a valid username"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="form-control"
+            placeholder="Enter password"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="uid">UID</label>
+          <input
+            type="text"
+            id="uid"
+            value={uid}
+            onChange={(e) => setUid(e.target.value)}
+            className="form-control"
+            placeholder="Enter UID"
+          />
+        </div>
+
+        <button
+          type="button"
+          className="btn btn-primary btn-lg"
+          onClick={registerUser}
+        >
+          Signup
+        </button>
+
+        <p className="small mt-3">
+          Already have an account?{' '}
+          <a href="/login" className="link-danger">
+            Login
+          </a>
+        </p>
+      </form>
     </div>
   );
 };

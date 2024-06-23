@@ -1,19 +1,19 @@
 import React from 'react'
+import './styling/about.css'
+import homeImage from './imgs/homeimage.jpeg';
+
 
 const AboutPage = () => {
   return (
-    // <div className='ml-4'>
-    // <h2 className="text-2xl font-bold text-violet-500">About Emotion Stream</h2>
-    // </div>
-    <div className='ml-4'>
-    <h2 className="text-2xl font-bold text-violet-500">
-  About {' '}
-  <span style={{ fontStyle: 'italic' }}>Emotion Stream</span>
-</h2>
-    <p style={{ marginTop: '1.5rem' }}>Real time live stream web application that aids in the efficient detection of negative emotions/anomalities in the elderly or nursing home patients built on the Hume AI model, providing synchronized alerts to nurses for expedited notification of emotional state for every patient</p>
-</div>
-
-  )
+      <div className='about-container'>
+        <h1>Emotion Stream</h1>
+          <p className="about-description">
+          Empowering caregivers with real-time AI analysis of elderly patient livestreams to promptly alert nurses of distress or pain indicators
+          </p>
+          <img className='titleImage' src={homeImage} alt="Home Image" />
+      </div>
+  );
 }
+
 
 export default AboutPage
