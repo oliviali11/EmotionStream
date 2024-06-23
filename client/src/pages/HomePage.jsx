@@ -47,8 +47,6 @@ const HomePage = () => {
         console.error(`Error: ${err}`);
         toast.error('Error accessing webcam');
       });
-      fetchPredictions();
-
   }, []);
 
   const notifyReport = () => {
@@ -87,7 +85,7 @@ const HomePage = () => {
     }
   };
 
-  const fetchPredictions = async () => {
+  /*const fetchPredictions = async () => {
     try {
       const response = await axios.get('http://localhost:8000/predictions/predictions.json');
       setPredictions(response.data); // Set predictions state with fetched data
@@ -96,8 +94,7 @@ const HomePage = () => {
       console.error('Error fetching predictions:', error);
       setError("Failed to fetch predictions.");
     }
-  };
-
+  };*/
 
   return (
     <div>
