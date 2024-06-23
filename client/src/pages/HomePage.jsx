@@ -7,6 +7,7 @@ import NursePage from './NursePage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faVideo } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
+import './styling/home.css'
 
 library.add(faVideo);
 
@@ -118,65 +119,45 @@ const HomePage = () => {
 
 
   return (
-    <div className='ml-4'>
-    <div className='ml-4'>
-    <div>
-      <div className="flex items-center">
-        <h1 className="text-2xl font-bold mr-4 text-violet-500">Live Patient Stream</h1>
-        <FontAwesomeIcon icon={['fa-solid', 'fa-video']} className="text-xl" />
-    </div>
-      <div className="flex items-center">
-        <h1 className="text-2xl font-bold mr-4 text-violet-500">Live Patient Stream</h1>
-        <FontAwesomeIcon icon={['fa-solid', 'fa-video']} className="text-xl" />
-    </div>
-      <video ref={videoRef} width="640" height="480" autoPlay></video>
-      <canvas ref={canvasRef} width="640" height="480" style={{ display: 'none' }}></canvas>
+    <div className="patient-stream">
+      <div className="header">
+        <h1 className="title">Live Patient Stream</h1>
+        <FontAwesomeIcon icon={faVideo} className="video-icon" />
+      </div>
 
-<div className="fixed top-1/2 transform -translate-y-1/2 right-1/4 m-8">
-  <div className="mb-4 space-y-2">
-    <button onClick={handleClick} className="shadow-md bg-purple-300 text-violet-500 hover:text-white rounded-md px-4 py-3 block w-full text-lg"> {/* Increased padding and font size */}
-      Details
-    </button>
-    <button onClick={notifyReport} className="shadow-md bg-purple-300 text-violet-500 hover:text-white rounded-md px-4 py-3 block w-full text-lg"> {/* Increased padding and font size */}
-      Report
-    </button>
-    <button onClick={directSignup} className="shadow-md bg-purple-300 text-violet-500 hover:text-white rounded-md px-4 py-3 block w-full text-lg"> {/* Increased padding and font size */}
-      Sign Up!
-    </button>
-    <button onClick={directLogin} className="shadow-md bg-purple-300 text-violet-500 hover:text-white rounded-md px-4 py-3 block w-full text-lg"> {/* Increased padding and font size */}
-      Log in!
-    </button>
-  </div>
-</div>
+      <video ref={videoRef} className="video-element" autoPlay></video>
+      <canvas ref={canvasRef} className="canvas-element"></canvas>
 
-
-
-
-
-
+      <div className="actions">
+        <div className="action-buttons">
+          <button onClick={handleClick} className="btn btn-details">
+            Details
+          </button>
+          <button onClick={notifyReport} className="btn btn-report">
+            Report
+          </button>
+          <button onClick={directSignup} className="btn btn-signup">
+            Sign Up!
+          </button>
+          <button onClick={directLogin} className="btn btn-login">
+            Log in!
+          </button>
+        </div>
+      </div>
 
       {predictions ? (
-        <div>
-          <h2 className='font-bold mr-4 text-violet-500'>Emotion Display</h2>
-          <h2 className='font-bold mr-4 text-violet-500'>Emotion Display</h2>
+        <div className="emotion-display">
+          <h2 className="section-title">Emotion Display</h2>
           <pre>{JSON.stringify(predictions, null, 2)}</pre>
         </div>
       ) : (
         <p>No predictions available</p>
       )}
-      </div>
 
-{negativeDetected && <NursePage negativeDetected={negativeDetected} patientID={randomId}/>}
-      </div>
-
-{negativeDetected && <NursePage negativeDetected={negativeDetected} patientID={randomId}/>}
-
-    
-      <ToastContainer />
-
+      {negativeDetected && <NursePage negativeDetected={negativeDetected} patientID={randomId} />}
+      
+      <div id="toastContainer"></div>
     </div>
-
-    
   );
 };
 

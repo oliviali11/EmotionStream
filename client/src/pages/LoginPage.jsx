@@ -1,89 +1,86 @@
 import React, { useState } from "react";
 import axios from 'axios';
+import './styling/login.css';
 import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+  const logInUser = async (event) => {
+    event.preventDefault();
 
-    const navigate = useNavigate();
+    if (username.length === 0) {
+      alert("Username cannot be left blank!");
+    } else if (password.length === 0) {
+      alert("Password cannot be left blank!");
+    } else {
+      try {
+        const response = await axios.post('http://localhost:8000/login', {
+          username: username,
+          password: password
+        });
 
-    const logInUser = async (event) => {
-        event.preventDefault();
-
-        if (username.length === 0) {
-            alert("Username has left Blank!");
-        } else if (password.length === 0) {
-            alert("Password has left Blank!");
+        localStorage.setItem('accessToken', response.data.access_token);
+        navigate("/nurse");
+      } catch (error) {
+        console.log(error);
+        if (error.response && error.response.status === 401) {
+          alert("Invalid credentials");
         } else {
-            try {
-                const response = await axios.post('http://localhost:8000/login', {
-                    username: username,
-                    password: password
-                });
-                console.log(response);
-                // Handle successful login, maybe save token in local storage
-                navigate("/");
-            } catch (error) {
-                console.log(error, 'error');
-                if (error.response && error.response.status === 401) {
-                    alert("Invalid credentials");
-                } else {
-                    alert("An error occurred. Please try again.");
-                }
-            }
+          alert("An error occurred. Please try again.");
         }
+      }
     }
+  };
 
-    let imgs = [
-        'https://as1.ftcdn.net/v2/jpg/03/39/70/90/1000_F_339709048_ZITR4wrVsOXCKdjHncdtabSNWpIhiaR7.jpg',
-    ];
-
-    return (
-        <div>
-            <div className="container h-100">
-                <div className="container-fluid h-custom">
-                    <div className="row d-flex justify-content-center align-items-center h-100">
-                        <div className="col-md-9 col-lg-6 col-xl-5">
-                            <img src={imgs[0]} className="img-fluid" alt="Login"/>
-                        </div>
-                        <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-                            <form onSubmit={logInUser}>
-                                <div className="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
-                                    <p className="lead fw-normal mb-0 me-3">Log Into Your Account</p>
-                                </div>
-
-                                <div className="form-outline mb-4">
-                                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} id="form3Example3" className="form-control form-control-lg" placeholder="Enter a valid username" required />
-                                    <label className="form-label" htmlFor="form3Example3">Username</label>
-                                </div>
-
-                                <div className="form-outline mb-3">
-                                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} id="form3Example4" className="form-control form-control-lg" placeholder="Enter password" required />
-                                    <label className="form-label" htmlFor="form3Example4">Password</label>
-                                </div>
-
-                                <div className="d-flex justify-content-between align-items-center">
-                                    <div className="form-check mb-0">
-                                        <input className="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
-                                        <label className="form-check-label" htmlFor="form2Example3">
-                                            Remember me
-                                        </label>
-                                    </div>
-                                    <a href="#!" className="text-body">Forgot password?</a>
-                                </div>
-
-                                <div className="text-center text-lg-start mt-4 pt-2">
-                                    <button type="submit" className="btn btn-primary btn-lg">Login</button>
-                                    <p className="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="/signup" className="link-danger">Register</a></p>
-                                </div>
-
-                            </form>
-                        </div>
-                    </div>
-                </div>
+  return (
+    <div className="sign-container">
+      <div className="row d-flex justify-content-center align-items-center h-100">
+        <div className="col-md-6 col-lg-5 col-xl-4">
+          <form onSubmit={logInUser}>
+            <div className="d-flex flex-row align-items-center justify-content-center justify-content-lg-start mb-4">
+              <p className="lead fw-bold mb-0">Log Into Your Account</p>
             </div>
+            <div className="form-group mb-4">
+              <label htmlFor="username">Username</label>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                id="username"
+                className="form-control"
+                placeholder="Enter a valid username"
+                required
+              />
+            </div>
+            <div className="form-group mb-4">
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                id="password"
+                className="form-control"
+                placeholder="Enter password"
+                required
+              />
+            </div>
+            <div className="d-flex justify-content-between align-items-center mb-4">
+              <div className="form-check">
+                <input className="form-check-input" type="checkbox" value="" id="rememberMe" />
+                <label className="form-check-label" htmlFor="rememberMe">Remember me</label>
+              </div>
+              <a href="#!" className="text-body">Forgot password?</a>
+            </div>
+            <div className="text-center text-lg-start">
+              <button type="submit" className="btn btn-primary">Login</button>
+              <p className="small fw-bold mt-2 mb-0">Don't have an account? <a href="/signup" className="link-danger">Register</a></p>
+            </div>
+          </form>
         </div>
-    );
+      </div>
+    </div>
+  );
 }
