@@ -4,6 +4,7 @@ import MainLayout from './layouts/MainLayout';
 import HomePage from './pages/HomePage';
 import NursePage from './pages/NursePage';
 import PatientDetailsPage from './pages/PatientDetailsPage';
+import AboutPage from './pages/AboutPage';
 
 function App() {
 
@@ -13,6 +14,7 @@ function App() {
       <Route index element={<NursePage/>}/>
       <Route path='/patient-stream' element={<HomePage/>}/>
       <Route path='/patient-details/:id' element={<PatientDetailsPage/>}/>
+      <Route path='/about' element={<AboutPage/>}/>
     </Route>
     
   ))
