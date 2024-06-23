@@ -56,15 +56,12 @@ def register_user(name: str, username: str, password: str, uid):
         "username": username,
         "password": password
     })
-'''
-@app.route('/users/<id>/status', methods=['PUT'])
-def update_status(id):
-    status = request.json['status']
-    patients.users.update_one({'_id': ObjectId(id)}, {'$set': {'status': status}})
-    return jsonify({'status': 'success'})
-'''
+
 def fetch_user_by_username(username: str):
     return nurses.find_one({"username": username})
+
+def fetch_patient_by_username(username: str):
+    return patients.find_one({"name": username})
 
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = "8V1Us02u3v"
@@ -72,11 +69,6 @@ bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 cors = CORS(app, origins='*')
 
-'''
-@app.before_first_request
-def clear_session_data():
-    session.clear()  # Clear Flask session data
-'''
 # Create a directory to save captured images if it doesn't exist
 output_dir = "static"
 if not os.path.exists(output_dir):
@@ -113,7 +105,7 @@ def signup():
     else:
         return jsonify({"error": "Create failed"}), 400
 
-@app.route("/login", methods=["POST"])
+@app.route("/nurse-login", methods=["POST"])
 def login_user():
     data = request.get_json()
     username = data["username"]
@@ -127,6 +119,18 @@ def login_user():
     if not bcrypt.check_password_hash(user['password'], password):
         return jsonify({"error": "Unauthorized"}), 401
 
+    access_token = create_access_token(identity={"username": username})
+    return jsonify(access_token=access_token), 200
+
+@app.route("/patient-login", methods=["POST"])
+def login_patient():
+    data = request.get_json()
+    username = data["username"]
+
+    user = fetch_patient_by_username(username)
+    if user is None: 
+        return jsonify({"error": "Please go to signup"}), 401
+    
     access_token = create_access_token(identity={"username": username})
     return jsonify(access_token=access_token), 200
 
@@ -202,12 +206,11 @@ negative_emotions = ['Anger', 'Anxiety', 'Distress', 'Fear', 'Horror', 'Pain', '
 neg_emotionscores = {}
 neg_emotionsaverages = {}
 
-def tempAddAttack(name,attack):
-    if name and attack:
-        result = patients.update_one(
-            {"name": name},
-            {"$push": {"attacks": attack}}
-        )
+def addAttack(name,attack):
+    result = patients.update_one(
+        {"name": name},
+        {"$push": {"attacks": attack}}
+    )
     return result
 
 
@@ -219,7 +222,7 @@ def add_new_emotionscores(predictedemotions):
                     neg_emotionscores[emotion['name']].pop(0)
                     neg_emotionscores[emotion['name']].append(emotion['score'])
                     emotionavg = sum(neg_emotionscores[emotion['name']]) / min_seconds
-                    print("AVERAGE", emotion['name'], emotionavg)
+                    #print("AVERAGE", emotion['name'], emotionavg)
                     if emotionavg > threshold:
                         neg_emotionsaverages[emotion['name']] = emotionavg
                     elif emotion['name'] in neg_emotionsaverages.keys():
@@ -233,7 +236,9 @@ def add_new_emotionscores(predictedemotions):
     if len(list(sorted_avgs)) >= 3:
         return list(sorted_avgs.items())[:3], True
     elif len(list(sorted_avgs)) > 0:
-        tempAddAttack("Rishita Dhalbisoi", list(sorted_avgs.keys())[0] + ", stituation unknown")
+        patient_name = request.headers.get('patientUsername')
+        print("patient", patient_name)
+        addAttack(patient_name, list(sorted_avgs.keys())[0] + ", situation unknown")
         return list(sorted_avgs.items()), True
     else:
         return ["Everything looks good!"], False
