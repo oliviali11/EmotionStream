@@ -7,8 +7,8 @@ const NavBar = () => {
     <nav className='flex justify-between items-center px-4 py-2'>
         <div className="md:ml-auto">
             <div className="flex space-x-2">
-                <NavLink to="/" className={linkClass}>Home</NavLink>
-                <NavLink to="/nurse" className={linkClass}>Nurse</NavLink>
+                <NavLink to="/patient-stream" className={linkClass}>Home</NavLink>
+                <NavLink to="/" className={linkClass}>Nurse</NavLink>
             </div>
         </div>
     </nav>

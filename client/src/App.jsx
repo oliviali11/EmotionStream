@@ -10,8 +10,8 @@ function App() {
 
   const router = createBrowserRouter(createRoutesFromElements(
     <Route path='/' element={<MainLayout/>}>
-      <Route index element={<HomePage/>}/>
-      <Route path='/nurse' element={<NursePage/>}/>
+      <Route index element={<NursePage/>}/>
+      <Route path='/patient-stream' element={<HomePage/>}/>
       <Route path='/patient-details/:id' element={<PatientDetailsPage/>}/>
     </Route>
     

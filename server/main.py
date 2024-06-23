@@ -128,11 +128,11 @@ def add_new_emotionscores(predictedemotions):
                 neg_emotionscores[emotion['name']] = [emotion['score']]
     sorted_avgs = dict(sorted(neg_emotionsaverages.items(), key=lambda item: item[1], reverse=True))
     if len(list(sorted_avgs)) >= 3:
-        return list(sorted_avgs.items())[:3]
+        return list(sorted_avgs.items())[:3], True
     elif len(list(sorted_avgs)) > 0:
-        return list(sorted_avgs.items())
+        return list(sorted_avgs.items()), True
     else:
-        return ["Everything looks good!"]
+        return ["Everything looks good!"], False
 
 @app.route('/capture', methods=['POST'])
 def capture():
@@ -163,9 +163,9 @@ def capture():
     with open(predictions_filename, 'r') as f:
         predictions_data = json.load(f)
     
-    top_emotions = add_new_emotionscores(predictions_data[0]['results']['predictions'][0]['models']['face']['grouped_predictions'][0]['predictions'][0]['emotions'])
+    top_emotions, negative_detected = add_new_emotionscores(predictions_data[0]['results']['predictions'][0]['models']['face']['grouped_predictions'][0]['predictions'][0]['emotions'])
 
-    return jsonify(top_emotions)
+    return jsonify({"top_emotions": top_emotions, "negative_detected": negative_detected})
 
 @app.route('/')
 def index():
