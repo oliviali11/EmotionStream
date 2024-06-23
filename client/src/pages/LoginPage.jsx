@@ -21,8 +21,8 @@ export default function LoginPage() {
           username: username,
           password: password
         });
-
-        localStorage.setItem('accessToken', response.data.access_token);
+        sessionStorage.setItem('accessToken', response.data.access_token);
+        //localStorage.setItem('accessToken', response.data.access_token);
         navigate("/nurse");
       } catch (error) {
         console.log(error);

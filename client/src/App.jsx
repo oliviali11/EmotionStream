@@ -13,11 +13,13 @@ import NavBar from './components/NavBar';
 function App() {
   const router = createBrowserRouter(createRoutesFromElements(
     <Route path='/' element={<MainLayout/>}>
-      <Route index element={<NursePage/>}/>
+      
+      <Route index element={<AboutPage/>}/>
       <Route path='/patient-stream' element={<HomePage/>}/>
       <Route path='/patient-details/:id' element={<PatientDetailsPage/>}/>
       <Route path="/login" element={<LoginPage/>} />
       <Route path="/signup" element={<SignupPage/>} />
+      <Route path="/nurse-page" element={<NursePage/>}/>
       <Route path="/about" element={<AboutPage/>}/>
       <Route
           path="/nurse"

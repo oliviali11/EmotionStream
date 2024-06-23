@@ -11,7 +11,7 @@ const NursePage = ({ negativeDetected, patientID }) => {
 
     useEffect(() => {
         const fetchPatients = async () => {
-            const token = localStorage.getItem('accessToken');
+            const token = sessionStorage.getItem('accessToken');
             try {
                 const response = await axios.get('http://localhost:8000/patients', {
                     headers: { Authorization: `Bearer ${token}` },
