@@ -49,11 +49,8 @@ const HomePage = () => {
         console.error(`Error: ${err}`);
         toast.error('Error accessing webcam');
       });
-<<<<<<< HEAD
       // fetchPredictions();
 
-=======
->>>>>>> 61942d900837be4d15f216fd7f225326a4ddb317
   }, []);
 
   const notifyReport = () => {
@@ -93,16 +90,17 @@ const HomePage = () => {
     }
   };
 
-  /*const fetchPredictions = async () => {
-    try {
-      const response = await axios.get('http://localhost:8000/predictions/predictions.json');
-      setPredictions(response.data); // Set predictions state with fetched data
-      setError(null); // Clear any previous errors
-    } catch (error) {
-      console.error('Error fetching predictions:', error);
-      setError("Failed to fetch predictions.");
-    }
-  };*/
+  // const fetchPredictions = async () => {
+  //   try {
+  //     const response = await axios.get('http://localhost:8000/predictions/predictions.json');
+  //     setPredictions(response.data); // Set predictions state with fetched data
+  //     setError(null); // Clear any previous errors
+  //   } catch (error) {
+  //     console.error('Error fetching predictions:', error);
+  //     setError("Failed to fetch predictions.");
+  //   }
+  // };
+
 
   return (
     <div>
