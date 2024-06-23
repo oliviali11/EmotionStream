@@ -75,6 +75,10 @@ const HomePage = () => {
     navigate('/signup');
   }
 
+  const directLogin = () => {
+    navigate('/login')
+  }
+
 
 
   const captureImage = () => {
@@ -138,6 +142,9 @@ const HomePage = () => {
     </button>
     <button onClick={directSignup} className="shadow-md bg-purple-300 text-violet-500 hover:text-white rounded-md px-4 py-3 block w-full text-lg"> {/* Increased padding and font size */}
       Sign Up!
+    </button>
+    <button onClick={directLogin} className="shadow-md bg-purple-300 text-violet-500 hover:text-white rounded-md px-4 py-3 block w-full text-lg"> {/* Increased padding and font size */}
+      Log in!
     </button>
   </div>
 </div>

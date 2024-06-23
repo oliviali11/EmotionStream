@@ -51,13 +51,6 @@ const SignupPage = () => {
     <div className="container h-100">
       <div className="container-fluid h-custom">
         <div className="row d-flex justify-content-center align-items-center h-100">
-          <div className="col-md-9 col-lg-6 col-xl-5">
-            <img
-              src="https://as1.ftcdn.net/v2/jpg/03/39/70/90/1000_F_339709048_ZITR4wrVsOXCKdjHncdtabSNWpIhiaR7.jpg"
-              className="img-fluid"
-              alt="Sample"
-            />
-          </div>
           <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
             <form>
               <div className="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
