@@ -206,12 +206,11 @@ negative_emotions = ['Anger', 'Anxiety', 'Distress', 'Fear', 'Horror', 'Pain', '
 neg_emotionscores = {}
 neg_emotionsaverages = {}
 
-def tempAddAttack(name,attack):
-    if name and attack:
-        result = patients.update_one(
-            {"name": name},
-            {"$push": {"attacks": attack}}
-        )
+def addAttack(name,attack):
+    result = patients.update_one(
+        {"name": name},
+        {"$push": {"attacks": attack}}
+    )
     return result
 
 
@@ -223,7 +222,7 @@ def add_new_emotionscores(predictedemotions):
                     neg_emotionscores[emotion['name']].pop(0)
                     neg_emotionscores[emotion['name']].append(emotion['score'])
                     emotionavg = sum(neg_emotionscores[emotion['name']]) / min_seconds
-                    print("AVERAGE", emotion['name'], emotionavg)
+                    #print("AVERAGE", emotion['name'], emotionavg)
                     if emotionavg > threshold:
                         neg_emotionsaverages[emotion['name']] = emotionavg
                     elif emotion['name'] in neg_emotionsaverages.keys():
@@ -237,7 +236,9 @@ def add_new_emotionscores(predictedemotions):
     if len(list(sorted_avgs)) >= 3:
         return list(sorted_avgs.items())[:3], True
     elif len(list(sorted_avgs)) > 0:
-        tempAddAttack("Rishita Dhalbisoi", list(sorted_avgs.keys())[0] + ", stituation unknown")
+        patient_name = request.headers.get('patientUsername')
+        print("patient", patient_name)
+        addAttack(patient_name, list(sorted_avgs.keys())[0] + ", situation unknown")
         return list(sorted_avgs.items()), True
     else:
         return ["Everything looks good!"], False
