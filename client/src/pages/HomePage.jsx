@@ -3,6 +3,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
+import NursePage from './NursePage';
 
 
 const HomePage = () => {
@@ -10,6 +11,7 @@ const HomePage = () => {
   const canvasRef = useRef(null);
   const [capturedImage, setCapturedImage] = useState(null);
   const [predictions, setPredictions] = useState(null);
+  const [negativeDetected, setNegativeDetected] = useState(false);
 
   const navigate = useNavigate();
 
@@ -47,7 +49,7 @@ const HomePage = () => {
         console.error(`Error: ${err}`);
         toast.error('Error accessing webcam');
       });
-      fetchPredictions();
+      // fetchPredictions();
 
   }, []);
 
@@ -81,22 +83,23 @@ const HomePage = () => {
       const response = await axios.post('http://localhost:8000/capture', {
         image: imageData
       });
-      setPredictions(response.data);  // Update predictions state with response data
+      setPredictions(response.data.top_emotions);  // Update predictions state with response data
+      setNegativeDetected(response.data.negative_detected);
     } catch (error) {
       console.error("Error uploading image: ", error);
     }
   };
 
-  const fetchPredictions = async () => {
-    try {
-      const response = await axios.get('http://localhost:8000/predictions/predictions.json');
-      setPredictions(response.data); // Set predictions state with fetched data
-      setError(null); // Clear any previous errors
-    } catch (error) {
-      console.error('Error fetching predictions:', error);
-      setError("Failed to fetch predictions.");
-    }
-  };
+  // const fetchPredictions = async () => {
+  //   try {
+  //     const response = await axios.get('http://localhost:8000/static/predictions.json');
+  //     setPredictions(response.data); // Set predictions state with fetched data
+  //     setError(null); // Clear any previous errors
+  //   } catch (error) {
+  //     console.error('Error fetching predictions:', error);
+  //     setError("Failed to fetch predictions.");
+  //   }
+  // };
 
 
   return (
@@ -124,6 +127,8 @@ const HomePage = () => {
       ) : (
         <p>No predictions available</p>
       )}
+
+{negativeDetected && <NursePage negativeDetected={negativeDetected} patientID={randomId}/>}
 
     
       <ToastContainer />
